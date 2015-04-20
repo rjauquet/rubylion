@@ -18,5 +18,12 @@
   "homepage": "https://github.com/rjauquet/rubylion",
   "dependencies": {
     "react": "^0.13.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.6.4",
+    "gulp": "^3.8.11",
+    "gulp-webpack": "^1.3.2",
+    "path": "^0.11.14",
+    "webpack": "^1.8.5"
   }
 }
