@@ -5,21 +5,26 @@ var Main = React.createClass({
     getDefaultProps: function (){
         return {
             style: {
-                width: '100px',
+                width: 'auto',
                 height: 'auto',
             }
         };
     },
     getInitialState: function (){
         return {
-            markup: '### Hello, me'
+            markup: '## Hello, me\n## Hello, you'
         };
     },
     render: function() {
-        var markup = marked(this.state.markup, {sanitize: true});
+        var text = ''
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+          text = marked(this.state.markup, {sanitize: true});
+        } else {
+            text = 'File reading not supported by this browser';
+        }
         return (
             <div className="main" style={this.props.style}>
-                <span dangerouslySetInnerHTML={{__html: markup}} />
+                <span dangerouslySetInnerHTML={{__html: text}} />
             </div>
         );
     }
