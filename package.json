@@ -1,0 +1,22 @@
+{
+  "name": "rubylion",
+  "version": "1.0.0",
+  "description": "Initial repo for rubylion",
+  "main": "entry.jsx",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rjauquet/rubylion.git"
+  },
+  "author": "Rob Jauquet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rjauquet/rubylion/issues"
+  },
+  "homepage": "https://github.com/rjauquet/rubylion",
+  "dependencies": {
+    "react": "^0.13.2"
+  }
+}
