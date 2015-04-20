@@ -1,14 +1,15 @@
 var gulp        = require('gulp'),
     webpack     = require('webpack'),
     gulpWebpack = require('gulp-webpack'),
-    browserSync = require('browser-sync'),
-    reload      = browserSync.reload,
-    path        = require('path');
+    path        = require('path'),
+    webserver   = require('gulp-webserver');
 
 // Webpack commons
 var webpackCommons = {
     module: {
-        loaders: [],
+        loaders: [
+            { test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'jsx-loader' },
+        ],
     },
     resolve: {
         root: [path.join(__dirname, "js")],
@@ -16,9 +17,19 @@ var webpackCommons = {
     }
 };
 
-gulp.task('default', ['webpack-build']);
+gulp.task('default', ['webserver', 'webpack']);
 
-gulp.task('webpack-build', function() {
+gulp.task('webserver', function() {
+  gulp.src('')
+    .pipe(webserver({
+      livereload: true,
+      directoryListing: false,
+      open: true,
+      port: 9000
+    }));
+});
+
+gulp.task('webpack', function() {
 
     var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.bundle.js');
 
@@ -26,16 +37,15 @@ gulp.task('webpack-build', function() {
         .pipe(gulpWebpack({
             watch: true,
             context: path.join(__dirname, "js"),
-                devtool: 'source-map',
-                entry: {
-                    app: ["./entry.jsx"]
-                },
-                output: {
+            devtool: 'source-map',
+            entry: {
+                app: ["./entry.jsx"]
+            },
+            output: {
                 path: __dirname + '/build',
                 filename: 'rubylion.bundle.js',
                 publicPath: '/js/'
             },
-
             module: webpackCommons.module,
             resolve: webpackCommons.resolve,
             debug: true,
@@ -43,12 +53,4 @@ gulp.task('webpack-build', function() {
         }, webpack ))
         .pipe(gulp.dest('build/js'))
         .pipe(reload({stream:true}));
-});
-
-gulp.task('browser-sync', function() {
-    browserSync({
-        proxy: "0.0.0.0:9000",
-        reloadDelay: 0,
-        reloadOnRestart: false
-    });
 });
