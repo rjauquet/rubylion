@@ -16,7 +16,7 @@ var Main = React.createClass({
         };
     },
     render: function() {
-        var text = ''
+        var text = '';
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           text = marked(this.state.markup, {sanitize: true});
         } else {
