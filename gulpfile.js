@@ -8,6 +8,7 @@ var gulp        = require('gulp'),
 var webpackCommons = {
     module: {
         loaders: [
+
             { test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'jsx-loader' },
         ],
     },
@@ -33,7 +34,7 @@ gulp.task('webpack', function() {
 
     var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.bundle.js');
 
-    return gulp.src('src/js/entry.jsx')
+    return gulp.src('js/entry.jsx')
         .pipe(gulpWebpack({
             watch: true,
             context: path.join(__dirname, "js"),

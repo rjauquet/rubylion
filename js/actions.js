@@ -11,8 +11,14 @@ var defaults = {
 };
 
 var Actions = Reflux.createActions({
-    'filterMapByDate': {
+    'filterLocationsByDate': {
+        preEmit: defaults.preEmit,
+        shouldEmit: defaults.shouldEmit
+    },
+    'fetchLocationData': {
         preEmit: defaults.preEmit,
         shouldEmit: defaults.shouldEmit
     },
 });
+
+module.exports = Actions;

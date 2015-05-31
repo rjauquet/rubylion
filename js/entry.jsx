@@ -1,72 +1,50 @@
 var React         = require('react/addons'),
     Reflux        = require('reflux'),
     Actions       = require('./actions.js'),
-    Utility       = require('./utility.js'),
-    ajax          = Utility.ajax,
     LocationStore = require('./stores/LocationStore.js'),
     highlight     = require('highlight.js'),
     marked        = require('marked'),
     moment        = require('moment'),
     L             = require('leaflet');
 
-    require('../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js')(window, document, undefined);
-
+require('../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js')(window, document, undefined);
+require('../node_modules/Leaflet.AnimatedMarker/src/AnimatedMarker.js')(window, document, undefined);
 L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images';
 
 var Main = React.createClass({
 
-    addMarkers: function(){
-        var self = this;
-        self.data = [];
+    mixins: [Reflux.listenToMany({
+        setMarkersFromStore: LocationStore,
+    })],
 
-        self.markers = new L.MarkerClusterGroup({
-            disableClusteringAtZoom: 9,
-            maxClusterRadius: 50
-        });
-
-        var addMarker = function (response){
-            var file = JSON.parse(JSON.parse(response));
-            console.log(file);
-            for(var i=0; i<file.coordinates.length; i++){
-                var marker = L.marker(
-                    [file.coordinates[i][1], file.coordinates[i][0]],
-                    { time: new moment(file.coordTimes[i]) }
-                );
-                self.markers.addLayer(
-                    marker
-                );
-                self.data.push(marker);
-            }
-        };
-
-        ajax.get("http://localhost:8080/data", function(response){
-
-            var files = JSON.parse(response);
-
-            for(var i=0; i<files.length; i++){
-                console.log("http://localhost:8080/data/" + files[i]);
-                ajax.get("http://localhost:8080/data/" + files[i], addMarker);
-            }
-
-            self.map.addLayer(self.markers);
-        });
-    },
-
-    filterMarkersByDate: function(start, end){
-        start = moment(start);
-        end = moment(end);
-
+    setMarkersFromStore: function(store){
         this.markers.clearLayers();
+        var line = [];
 
-        for(var i=0; i<this.data.length; i++){
-            var datetime = moment(this.data[i].options.time);
-            if(moment(datetime).isBetween(start, end) || moment(datetime).isSame(start) || moment(datetime).isSame(end)){
-                this.markers.addLayer(
-                    this.data[i]
-                );
-            }
+        for (var i = store.locations.length - 1; i >= 0; i--) {
+            this.markers.addLayer(
+                L.marker(
+                    [store.locations[i].lng, store.locations[i].lat],
+                    { datetime: store.locations[i].datetime }
+                )
+            );
+            line.push(L.latLng(store.locations[i].lng, store.locations[i].lat));
         }
+        var polyline_options = {
+            color: '#000',
+            smoothFactor: 1,
+            weight: 7
+          };
 
+        var polyline = L.polyline(line, polyline_options).addTo(this.map),
+            animatedMarker = L.animatedMarker(polyline.getLatLngs(),{
+                distance: 1000,  // meters
+                interval: 1000, // milliseconds
+            });
+
+        this.map.addLayer(animatedMarker);
+
+        this.map.fitWorld();
     },
 
     componentDidMount: function() {
@@ -80,11 +58,17 @@ var Main = React.createClass({
             ],
             attributionControl: false,
         });
+        this.markers = new L.MarkerClusterGroup({
+            //disableClusteringAtZoom: 12,
+            //animateAddingMarkers: true,
+            singleMarkerMode: true,
+            maxClusterRadius: 30
+        });
+        this.map.fitWorld();
+        map.addLayer(this.markers);
 
-        this.addMarkers();
-
-        //map.on('click', this.onMapClick);
-        map.fitWorld();
+        Actions.fetchLocationData();
+        window.filterbydate = Actions.filterLocationsByDate;
     },
     componentWillUnmount: function() {
         this.map.off('click', this.onMapClick);
