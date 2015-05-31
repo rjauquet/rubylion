@@ -49,7 +49,9 @@ gulp.task('webpack', function() {
             module: webpackCommons.module,
             resolve: webpackCommons.resolve,
             debug: true,
-            plugins: [commonsPlugin]
+            plugins: [
+                commonsPlugin
+            ]
         }, webpack ))
         .pipe(gulp.dest('build/js'))
         .pipe(reload({stream:true}));

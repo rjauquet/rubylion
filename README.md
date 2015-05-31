@@ -12,3 +12,5 @@ Build back with
 ```
 go build back
 ```
+
+Had to edit the leaflet.markercluster-src.js to export the code correctly
