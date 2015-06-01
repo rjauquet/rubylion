@@ -2,3 +2,4 @@
 /node_modules/
 /go/bin/
 /go/pkg/
+npm-debug.log
