@@ -20,7 +20,6 @@
     "highlight.js": "^8.5.0",
     "leaflet": "^0.7.3",
     "leaflet.markercluster": "^0.4.0",
-    "Leaflet.AnimatedMarker": "git://github.com/openplans/Leaflet.AnimatedMarker.git",
     "marked": "^0.3.3",
     "moment": "^2.10.3",
     "react": "^0.13.2",
