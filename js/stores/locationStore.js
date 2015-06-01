@@ -21,7 +21,25 @@ var LocationStore = Reflux.createStore({
 
     updateLocations: function (store){
         this.store.locations = (store.locations.length) ? store.locations : this.store.locations;
+        this.sortLocationsByDatetime();
         this.trigger(this.store);
+    },
+
+    sortLocationsByDatetime: function(){
+        var locations = this.store.locations;
+        console.log('sorting', locations.length, 'elements');
+        locations.sort(function compare(a, b) {
+            //a is less than b by some ordering criterion
+            if (moment(a.datetime).isBefore(b.datetime)) {
+                return 1;
+            }
+            //a is greater than b by the ordering criterion
+            if (moment(a.datetime).isAfter(b.datetime)) {
+                return -1;
+            }
+            // a must be equal to b
+            return 0;
+        });
     },
 
     onFilterLocationsByDate: function (start, end) {

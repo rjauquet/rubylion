@@ -34,7 +34,7 @@ gulp.task('webpack', function() {
 
     var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.bundle.js');
 
-    return gulp.src('js/entry.jsx')
+    return gulp.src('js/**/*.*')
         .pipe(gulpWebpack({
             watch: true,
             context: path.join(__dirname, "js"),

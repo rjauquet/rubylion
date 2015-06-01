@@ -14,3 +14,4 @@ go build back
 ```
 
 Had to edit the leaflet.markercluster-src.js to export the code correctly
+Had to edit the leaflet.AnimateMarker.js to export the code correctly

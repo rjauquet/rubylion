@@ -20,11 +20,12 @@
     "highlight.js": "^8.5.0",
     "leaflet": "^0.7.3",
     "leaflet.markercluster": "^0.4.0",
-    "Leaflet.AnimatedMarker": "git@github.com:openplans/Leaflet.AnimatedMarker.git",
+    "Leaflet.AnimatedMarker": "git://github.com/openplans/Leaflet.AnimatedMarker.git",
     "marked": "^0.3.3",
     "moment": "^2.10.3",
     "react": "^0.13.2",
-    "reflux": "^0.2.7"
+    "reflux": "^0.2.7",
+    "metrics-graphics": "https://github.com/mozilla/metrics-graphics/archive/v2.5.0.tar.gz"
   },
   "devDependencies": {
     "browser-sync": "^2.6.4",

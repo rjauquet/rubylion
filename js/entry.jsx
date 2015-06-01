@@ -1,7 +1,7 @@
 var React         = require('react/addons'),
     Reflux        = require('reflux'),
     Actions       = require('./actions.js'),
-    LocationStore = require('./stores/LocationStore.js'),
+    LocationStore = require('./stores/locationStore.js'),
     highlight     = require('highlight.js'),
     marked        = require('marked'),
     moment        = require('moment'),
@@ -18,7 +18,16 @@ var Main = React.createClass({
     })],
 
     setMarkersFromStore: function(store){
+
         this.markers.clearLayers();
+        if(this.polyline){
+            this.map.removeLayer(this.polyline);
+        }
+
+        if(!store.locations.length){
+            return;
+        }
+
         var line = [];
 
         for (var i = store.locations.length - 1; i >= 0; i--) {
@@ -36,15 +45,17 @@ var Main = React.createClass({
             weight: 7
           };
 
-        var polyline = L.polyline(line, polyline_options).addTo(this.map),
-            animatedMarker = L.animatedMarker(polyline.getLatLngs(),{
-                distance: 1000,  // meters
-                interval: 1000, // milliseconds
-            });
+        this.polyline = L.polyline(line, polyline_options).addTo(this.map);
+        var animatedMarker = L.animatedMarker(this.polyline.getLatLngs(),{
+            distance: 1000,  // meters
+            interval: 100, // milliseconds
+        });
 
         this.map.addLayer(animatedMarker);
 
-        this.map.fitWorld();
+        this.map.fitBounds(this.markers.getBounds());
+
+        console.log(store.locations);
     },
 
     componentDidMount: function() {
